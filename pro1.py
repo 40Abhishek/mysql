@@ -1,23 +1,19 @@
-# pro1.py
-import mysql.connector
+from mysql.connector import connect
 
-try:
-    con = mysql.connector.connect(
-        host="localhost",
-        user="40Abhishek",
-        password="Jenna@40",
-        database="teacher"
-    )
+conn = connect(
+    host="localhost",
+    user="root",
+    password="ADMIN",
+    database="teacher"
+)
 
-    cursor = con.cursor()
+cur = conn.cursor()
 
-    cursor.execute("SELECT * FROM instructor;")
-    result = cursor.fetchall()
+cur.execute("""
+    CREATE VIEW faculty AS
+    SELECT id, name, dept_name FROM instructor;
+""")
 
-    for row in result:
-        print(row)
-
-    con.close()
-
-except mysql.connector.Error as err:
-    print("Error:", err)
+conn.commit()
+conn.close()
+print("faculty view created successfully")
